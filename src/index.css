@@ -1,0 +1,38 @@
+@font-face {
+  font-family: "Roboto";
+  src: url("/public/fonts/Roboto-VariableFont_wdth,wght.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Roboto Italic";
+  src: url("/public/fonts/Roboto-Italic-VariableFont_wdth,wght.ttf")
+    format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+body {
+  margin: 0;
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.container {
+  max-width: 130rem;
+  padding: 0 30px;
+  margin: 0 auto;
+}
+
+h1 {
+  font-size: 4rem;
+  color: #0d4599;
+  font-weight: 700;
+  font-family: "Roboto Italic", sans-serif;
+}
