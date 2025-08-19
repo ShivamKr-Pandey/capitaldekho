@@ -36,3 +36,9 @@ h1 {
   font-weight: 700;
   font-family: "Roboto Italic", sans-serif;
 }
+
+@media (max-width: 46.937em) {
+  h1 {
+    font-size: 2.4rem;
+  }
+}
