@@ -1,0 +1,51 @@
+# Name of your workflow
+name: Build and Deploy to Hostinger
+
+# This workflow runs on any push to the 'main' branch
+on:
+  push:
+    branches:
+      - main
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  build-and-deploy:
+    # The type of virtual machine to run the job on
+    runs-on: ubuntu-latest
+
+    # A sequence of tasks that will be executed as part of the job
+    steps:
+      # 1. Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      # 2. Sets up Node.js on the virtual machine
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Specify the Node.js version you use
+
+      # 3. Installs dependencies and builds the project
+      - name: Install dependencies and build
+        run: |
+          npm ci
+          npm run build
+
+      # 4. Deploys the built files to Hostinger using FTP
+      - name: FTP Deploy
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          # The FTP server from Hostinger (stored in GitHub Secrets)
+          server: ${{ secrets.FTP_SERVER }}
+
+          # The FTP username (stored in GitHub Secrets)
+          username: ${{ secrets.FTP_USERNAME }}
+
+          # The FTP password (stored in GitHub Secrets)
+          password: ${{ secrets.FTP_PASSWORD }}
+
+          # The local directory on the runner to upload from (your build output)
+          local-dir: ./build/
+
+          # The remote directory on Hostinger to upload to
+          server-dir: ./public_html/
