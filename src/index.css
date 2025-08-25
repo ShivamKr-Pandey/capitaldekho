@@ -1,3 +1,8 @@
+:root {
+    color-scheme: light dark;
+}
+
+
 @font-face {
   font-family: "Roboto";
   src: url("/public/fonts/Roboto-VariableFont_wdth,wght.ttf") format("truetype");
