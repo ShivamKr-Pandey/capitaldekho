@@ -31,20 +31,19 @@ jobs:
           npm ci
           npm run build
 
-      # 4. Deploys the built files to Hostinger using FTP
-      - name: FTP Deploy
+      # 4. DEBUG: List files in the root directory to find the correct path
+      - name: List FTP files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
-          # The FTP server from Hostinger (stored in GitHub Secrets)
           server: ${{ secrets.FTP_SERVER }}
-
-          # The FTP username (stored in GitHub Secrets)
           username: ${{ secrets.FTP_USERNAME }}
-
-          # The FTP password (stored in GitHub Secrets)
           password: ${{ secrets.FTP_PASSWORD }}
+          # This command will list the contents of the starting directory
+          remote-path: '.'
+          args: -la
 
-          # The local directory on the runner to upload from (your build output)
-          local-dir: ./build/
 
-          server-dir: ./files/domains/capitaldekho.com/public_html/
+      # 5. Use an action to deploy the build folder to your server via FTP
+      - name: FTP Deploy
+          # (This step remains the same)
+
