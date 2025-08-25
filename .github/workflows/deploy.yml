@@ -1,49 +1,67 @@
-# Name of your workflow
+# Name for your workflow, which will appear in the "Actions" tab on GitHub
 name: Build and Deploy to Hostinger
 
-# This workflow runs on any push to the 'main' branch
+# Trigger the workflow on every push to the 'main' branch
 on:
   push:
     branches:
       - main
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+# Define the jobs to be run
 jobs:
   build-and-deploy:
-    # The type of virtual machine to run the job on
+    # Use the latest version of Ubuntu as the virtual environment
     runs-on: ubuntu-latest
 
-    # A sequence of tasks that will be executed as part of the job
+    # A sequence of steps to be executed
     steps:
-      # 1. Checks out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # 1. Checkout your repository code
       - name: Checkout Repository
         uses: actions/checkout@v4
 
-      # 2. Sets up Node.js on the virtual machine
+      # 2. Set up the Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20' # Specify the Node.js version you use
+          node-version: '20' # Use the Node.js version that matches your project
 
-      # 3. Installs dependencies and builds the project
-      - name: Install dependencies and build
+      # 3. Install dependencies securely and create the production build
+      - name: Install Dependencies and Build Project
         run: |
           npm ci
           npm run build
 
       # 4. DEBUG: List files in the root directory to find the correct path
+      # This step connects to your FTP server and lists all files/folders in the starting directory.
+      # The output of this step in the Actions log will show us the correct path to use below.
       - name: List FTP files
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
           server: ${{ secrets.FTP_SERVER }}
           username: ${{ secrets.FTP_USERNAME }}
           password: ${{ secrets.FTP_PASSWORD }}
-          # This command will list the contents of the starting directory
-          remote-path: '.'
-          args: -la
-
+          # The 'ls -la' command lists all contents of the directory.
+          # We are targeting the root directory '.' to see what's inside.
+          command: ls -la .
 
       # 5. Use an action to deploy the build folder to your server via FTP
       - name: FTP Deploy
-          # (This step remains the same)
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
+        with:
+          # Your FTP server from Hostinger (using the GitHub Secret)
+          server: ${{ secrets.FTP_SERVER }}
 
+          # Your FTP username (using the GitHub Secret)
+          username: ${{ secrets.FTP_USERNAME }}
+
+          # Your FTP password (using the GitHub Secret)
+          password: ${{ secrets.FTP_PASSWORD }}
+
+          # The source folder from this repository to upload (React's build output)
+          local-dir: ./build/
+
+          # The destination folder on your Hostinger server.
+          # We will adjust this path based on the output of the "List FTP files" step above.
+          server-dir: ./
+
+          # This option deletes everything in the destination folder before uploading.
