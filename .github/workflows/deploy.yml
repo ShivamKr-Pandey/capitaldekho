@@ -31,20 +31,8 @@ jobs:
           npm ci
           npm run build
 
-      # 4. DEBUG: List files in the root directory to find the correct path
-      # This step connects to your FTP server and lists all files/folders in the starting directory.
-      # The output of this step in the Actions log will show us the correct path to use below.
-      - name: List FTP files
-        uses: SamKirkland/FTP-Deploy-Action@v4.3.4
-        with:
-          server: ${{ secrets.FTP_SERVER }}
-          username: ${{ secrets.FTP_USERNAME }}
-          password: ${{ secrets.FTP_PASSWORD }}
-          # The 'ls -la' command lists all contents of the directory.
-          # We are targeting the root directory '.' to see what's inside.
-          command: ls -la .
 
-      # 5. Use an action to deploy the build folder to your server via FTP
+      # 4. Use an action to deploy the build folder to your server via FTP
       - name: FTP Deploy
         uses: SamKirkland/FTP-Deploy-Action@v4.3.4
         with:
@@ -62,6 +50,4 @@ jobs:
 
           # The destination folder on your Hostinger server.
           # We will adjust this path based on the output of the "List FTP files" step above.
-          server-dir: ./
-
-          # This option deletes everything in the destination folder before uploading.
+          server-dir: ./domains/capitaldekho.com/public_html/
