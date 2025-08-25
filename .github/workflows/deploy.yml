@@ -48,4 +48,4 @@ jobs:
           local-dir: ./build/
 
           # The remote directory on Hostinger to upload to
-          server-dir: ./public_html/
+          server-dir: ./domains/capitaldekho.com/public_html/
