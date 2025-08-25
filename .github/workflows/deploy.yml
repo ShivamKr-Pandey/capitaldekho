@@ -46,7 +46,7 @@ jobs:
           password: ${{ secrets.FTP_PASSWORD }}
 
           # The source folder from this repository to upload (React's build output)
-          local-dir: ./build/
+          local-dir: build/
 
           # The destination folder on your Hostinger server.
           # We will adjust this path based on the output of the "List FTP files" step above.
